@@ -22,7 +22,7 @@ class BinarySearchTree {
       }
     } else {
       if (this.right == null) {
-        this.right = new BinarySearchTree(key, value, null);
+        this.right = new BinarySearchTree(key, value, this);
       } else {
         this.right.insert(key, value);
       }
@@ -103,6 +103,34 @@ class BinarySearchTree {
     }
   }
 
+  countLeaves(count = 0){
+    if(!this.left && !this.right) return 1;
+
+    if(this.left){
+      count += this.left.countLeaves();
+    }
+
+    if(this.right){
+      count += this.right.countLeaves();
+    }
+
+    return count;
+  }
+
+  isBalancedBST(){
+    if(this.left && this.right){
+      const leftHeight = this.left.getHeight();
+      const rightHeight = this.right.getHeight();
+
+      const difference = Math.abs(leftHeight - rightHeight);
+
+      if(difference <= 1) return this.getHeight();
+      return -1;
+    }
+
+    return 0;
+  }
+
   _replaceWith(node) {
     if (this.parent) {
       if (this == this.parent.left) {
@@ -180,7 +208,7 @@ class BinarySearchTree {
 
   bfs(tree, values = []) {
     const queue = new Queue();
-    queue.enqueue(tree); // Start the traversal a t the tree and add the tree node to the queue to kick off the BFS
+    queue.enqueue(tree); // Start the traversal at the tree and add the tree node to the queue to kick off the BFS
     let node = queue.dequeue(); // Remove form the queue
     while (node) {
       values.push(node.value); // Add that dequeued value from the queue to an array
